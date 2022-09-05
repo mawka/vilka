@@ -1,0 +1,50 @@
+PUT http://localhost:9200/vilka
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "my_search_analyzer": {
+                        "type": "custom",
+                        "tokenizer": "standard",
+                        "filter": [
+                            "lowercase",
+                            "search_mark",
+							"search_model"
+                        ]
+                    }
+                },
+                "filter": {
+                    "search_mark": {
+                        "ignore_case": "true",
+                        "type": "synonym",
+                        "synonyms": [
+                            "Lada,Лада,ладочка",
+							"Hundai, Хенде, Хэнде"
+                        ]
+                    },
+					                   "search_model": {
+                        "ignore_case": "true",
+                        "type": "synonym",
+                        "synonyms": [
+                            "Xray,хрей",
+							"Vesta, веста, виста"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "mark": {
+                "type": "text",
+                "analyzer": "my_search_analyzer"
+            },
+            "model": {
+                "type": "text",
+                "analyzer": "my_search_analyzer"
+            }
+        }
+    }
+}
